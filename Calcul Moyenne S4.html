@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)file:///C:/Users/DELL/Downloads/Telegram%20Desktop/Calcul_Moyenne_S4.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcul Moyenne S4</title>
+<link href="./Calcul Moyenne S4_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #131929;
+    --card: #1a2235;
+    --border: #2a3a55;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --green: #22d3a5;
+    --yellow: #f5c842;
+    --red: #f25f5c;
+    --text: #e8edf8;
+    --muted: #6b7a99;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(79,142,247,0.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,92,252,0.07) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .container { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+  header { text-align: center; margin-bottom: 2.5rem; }
+  .badge {
+    display: inline-block;
+    background: rgba(79,142,247,0.12);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(79,142,247,0.25);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; margin-bottom: 1.5rem; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .card:hover { border-color: rgba(79,142,247,0.4); transform: translateY(-1px); }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .mod-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; max-width: 75%; }
+  .coef-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(124,92,252,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(124,92,252,0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .formula { font-size: 11px; color: var(--muted); margin-bottom: 12px; font-family: var(--mono); }
+  .inputs-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .inp-wrap { flex: 1; min-width: 90px; }
+  .inp-wrap label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .inp-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+  }
+  .inp-wrap input::-webkit-outer-spin-button,
+  .inp-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .inp-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,142,247,0.12); }
+  .mod-result { margin-top: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); min-height: 18px; transition: color 0.2s; }
+  .mod-result.has-val { color: var(--green); }
+  .calc-btn {
+    display: block; width: 100%; padding: 1rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-family: var(--mono); font-size: 15px; font-weight: 700;
+    letter-spacing: 1px; border: none; border-radius: 12px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s; margin-bottom: 1rem;
+  }
+  .calc-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .reset-btn {
+    display: block; width: 100%; padding: 0.75rem;
+    background: transparent; color: var(--muted); font-family: var(--mono);
+    font-size: 13px; border: 1px solid var(--border); border-radius: 12px;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s; margin-bottom: 2rem;
+  }
+  .reset-btn:hover { border-color: var(--red); color: var(--red); }
+  .result-panel {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 2rem; display: none;
+    animation: fadeUp 0.4s ease;
+  }
+  .result-panel.show { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .result-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+  .avg-display { font-family: var(--mono); }
+  .avg-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .avg-value { font-size: 3.5rem; font-weight: 700; line-height: 1; }
+  .avg-value.excellent { color: var(--green); }
+  .avg-value.good { color: var(--accent); }
+  .avg-value.pass { color: var(--yellow); }
+  .avg-value.fail { color: var(--red); }
+  .mention-pill { display: inline-block; font-family: var(--mono); font-size: 13px; font-weight: 700; padding: 8px 20px; border-radius: 30px; letter-spacing: 1px; }
+  .mention-pill.excellent { background: rgba(34,211,165,0.15); color: var(--green); border: 1px solid rgba(34,211,165,0.3); }
+  .mention-pill.good { background: rgba(79,142,247,0.15); color: var(--accent); border: 1px solid rgba(79,142,247,0.3); }
+  .mention-pill.pass { background: rgba(245,200,66,0.12); color: var(--yellow); border: 1px solid rgba(245,200,66,0.3); }
+  .mention-pill.fail { background: rgba(242,95,92,0.12); color: var(--red); border: 1px solid rgba(242,95,92,0.3); }
+  .detail-table { width: 100%; border-collapse: collapse; }
+  .detail-table th { text-align: left; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--border); font-family: var(--mono); }
+  .detail-table td { padding: 9px 8px; font-size: 13px; border-bottom: 1px solid rgba(42,58,85,0.5); }
+  .detail-table tr:last-child td { border-bottom: none; }
+  .note-cell { font-family: var(--mono); color: var(--accent); font-weight: 700; }
+  .points-cell { font-family: var(--mono); color: var(--muted); }
+  .fail-row td:first-child { color: var(--red); }
+  .progress-bar-wrap { margin-top: 1.5rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-family: var(--mono); }
+  .progress-track { background: var(--surface); border-radius: 10px; height: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">Université · Semestre 4</div>
+    <h1>Calcul Moyenne S4</h1>
+    <p class="subtitle">Saisir les notes sur 20 — calcul automatique pondéré</p>
+  </header>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">1. ISI — Systèmes d'information</div>
+        <div class="coef-badge">Coef 3</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TD×0.40</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="si_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TD</label><input type="number" id="si_td" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="si_res">Note : 10.00/20  ·  Points : 30.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">2. OOP2 — Programmation orientée objet</div>
+        <div class="coef-badge">Coef 6</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TP×0.40</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="poo_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TP</label><input type="number" id="poo_tp" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="poo_res">Note : 10.00/20  ·  Points : 60.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">3. IBD — Bases de données</div>
+        <div class="coef-badge">Coef 3</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TD×0.40</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="bdd_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TD</label><input type="number" id="bdd_tp" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="bdd_res">Note : 10.00/20  ·  Points : 30.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">4. IRI — Réseaux informatiques</div>
+        <div class="coef-badge">Coef 4</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TD×0.20 + TP×0.20</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="res_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TD</label><input type="number" id="res_td" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TP</label><input type="number" id="res_tp" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="res_res">Note : 10.00/20  ·  Points : 40.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">5. Projet</div>
+        <div class="coef-badge">Coef 6</div>
+      </div>
+      <div class="formula">Note directe</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Note</label><input type="number" id="projet" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="projet_res">Note : 10.00/20  ·  Points : 60.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">6. Anglais</div>
+        <div class="coef-badge">Coef 1</div>
+      </div>
+      <div class="formula">Note directe</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Note</label><input type="number" id="anglais" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="ang_res">Note : 10.00/20  ·  Points : 10.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">7. TG — Théorie des graphes</div>
+        <div class="coef-badge">Coef 3</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TD×0.40</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="graph_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TD</label><input type="number" id="graph_td" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="graph_res">Note : 10.00/20  ·  Points : 30.00</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="mod-name">8. TL — Théorie des langages</div>
+        <div class="coef-badge">Coef 3</div>
+      </div>
+      <div class="formula">Contrôle×0.60 + TD×0.40</div>
+      <div class="inputs-row">
+        <div class="inp-wrap"><label>Contrôle</label><input type="number" id="lang_cc" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+        <div class="inp-wrap"><label>TD</label><input type="number" id="lang_td" min="0" max="20" step="0.25" placeholder="—" oninput="liveCalc()"></div>
+      </div>
+      <div class="mod-result has-val" id="lang_res">Note : 10.00/20  ·  Points : 30.00</div>
+    </div>
+
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">⟶ CALCULER LA MOYENNE</button>
+  <button class="reset-btn" onclick="resetAll()">↺ Réinitialiser toutes les notes</button>
+
+  <div class="result-panel show" id="result_panel">
+    <div class="result-top">
+      <div class="avg-display">
+        <div class="avg-label">Moyenne générale</div>
+        <div class="avg-value pass" id="avg_big">10.00/20</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px;" id="coef_used">Total coefficients utilisés : 29/29</div>
+      </div>
+      <div id="mention_pill"><span class="mention-pill pass">Passable</span></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>0</span><span id="prog_val">10.00 / 20</span><span>20</span></div>
+      <div class="progress-track"><div class="progress-fill" id="prog_fill" style="width: 50%; background: var(--yellow);"></div></div>
+    </div>
+    <div style="margin-top:1.5rem;overflow-x:auto;">
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Note /20</th>
+            <th>Coef</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody id="detail_body">
+    <tr class="pass-row">
+      <td>ISI</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">3</td>
+      <td class="points-cell">30.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>OOP2</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">6</td>
+      <td class="points-cell">60.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>IBD</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">3</td>
+      <td class="points-cell">30.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>IRI</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">4</td>
+      <td class="points-cell">40.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>Projet</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">6</td>
+      <td class="points-cell">60.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>Anglais</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">1</td>
+      <td class="points-cell">10.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>TG</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">3</td>
+      <td class="points-cell">30.00</td>
+    </tr>
+  
+    <tr class="pass-row">
+      <td>TL</td>
+      <td class="note-cell">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">3</td>
+      <td class="points-cell">30.00</td>
+    </tr>
+  
+    <tr style="border-top:2px solid var(--border)">
+      <td style="font-weight:600">Moyenne</td>
+      <td class="note-cell" style="font-size:15px">10.00</td>
+      <td style="font-family:var(--mono);color:var(--muted)">29</td>
+      <td class="points-cell">290.00</td>
+    </tr>
+  </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const modules = [
+  { id:'si',     name:'ISI',     coef:3, fields:['si_cc','si_td'],               formula:(c,t)=>c*0.6+t*0.4,           resId:'si_res' },
+  { id:'poo',    name:'OOP2',    coef:6, fields:['poo_cc','poo_tp'],              formula:(c,p)=>c*0.6+p*0.4,           resId:'poo_res' },
+  { id:'bdd',    name:'IBD',     coef:3, fields:['bdd_cc','bdd_tp'],              formula:(c,t)=>c*0.6+t*0.4,           resId:'bdd_res' },
+  { id:'res',    name:'IRI',     coef:4, fields:['res_cc','res_td','res_tp'],     formula:(c,t,p)=>c*0.6+t*0.2+p*0.2,  resId:'res_res' },
+  { id:'projet', name:'Projet',  coef:6, fields:['projet'],                       formula:(n)=>n,                        resId:'projet_res' },
+  { id:'ang',    name:'Anglais', coef:1, fields:['anglais'],                      formula:(n)=>n,                        resId:'ang_res' },
+  { id:'graph',  name:'TG',      coef:3, fields:['graph_cc','graph_td'],          formula:(c,t)=>c*0.6+t*0.4,           resId:'graph_res' },
+  { id:'lang',   name:'TL',      coef:3, fields:['lang_cc','lang_td'],            formula:(c,t)=>c*0.6+t*0.4,           resId:'lang_res' },
+];
+
+function getVal(id) {
+  const el = document.getElementById(id);
+  if (!el || el.value === '') return null;
+  const n = parseFloat(el.value);
+  return (isNaN(n) || n < 0 || n > 20) ? null : n;
+}
+
+function calcModule(mod) {
+  const vals = mod.fields.map(f => getVal(f));
+  if (vals.some(v => v === null)) return null;
+  return mod.formula(...vals);
+}
+
+function liveCalc() {
+  modules.forEach(mod => {
+    const note = calcModule(mod);
+    const el = document.getElementById(mod.resId);
+    if (note !== null) {
+      el.textContent = `Note : ${note.toFixed(2)}/20  ·  Points : ${(note * mod.coef).toFixed(2)}`;
+      el.className = 'mod-result has-val';
+    } else {
+      el.textContent = '';
+      el.className = 'mod-result';
+    }
+  });
+}
+
+function getMentionClass(avg) {
+  if (avg >= 16) return 'excellent';
+  if (avg >= 14) return 'good';
+  if (avg >= 10) return 'pass';
+  return 'fail';
+}
+
+function getMentionText(avg) {
+  if (avg >= 16) return 'Très bien';
+  if (avg >= 14) return 'Bien';
+  if (avg >= 12) return 'Assez bien';
+  if (avg >= 10) return 'Passable';
+  return 'Insuffisant';
+}
+
+function calculate() {
+  let total = 0, coefUsed = 0;
+  const rows = [];
+  modules.forEach(mod => {
+    const note = calcModule(mod);
+    if (note !== null) {
+      total += note * mod.coef;
+      coefUsed += mod.coef;
+      rows.push({ name: mod.name, note, coef: mod.coef, points: note * mod.coef });
+    }
+  });
+  if (coefUsed === 0) { alert('Veuillez saisir au moins un module.'); return; }
+
+  const avg = total / coefUsed;
+  const cls = getMentionClass(avg);
+  const mention = getMentionText(avg);
+
+  document.getElementById('avg_big').textContent = avg.toFixed(2) + '/20';
+  document.getElementById('avg_big').className = 'avg-value ' + cls;
+  document.getElementById('coef_used').textContent = `Total coefficients utilisés : ${coefUsed}/29`;
+
+  document.getElementById('mention_pill').innerHTML = `<span class="mention-pill ${cls}">${mention}</span>`;
+
+  const pct = (avg / 20) * 100;
+  const fillColors = { excellent:'var(--green)', good:'var(--accent)', pass:'var(--yellow)', fail:'var(--red)' };
+  document.getElementById('prog_fill').style.width = pct.toFixed(1) + '%';
+  document.getElementById('prog_fill').style.background = fillColors[cls];
+  document.getElementById('prog_val').textContent = avg.toFixed(2) + ' / 20';
+
+  const tbody = document.getElementById('detail_body');
+  tbody.innerHTML = rows.map(r => `
+    <tr class="${r.note >= 10 ? 'pass-row' : 'fail-row'}">
+      <td>${r.name}</td>
+      <td class="note-cell">${r.note.toFixed(2)}</td>
+      <td style="font-family:var(--mono);color:var(--muted)">${r.coef}</td>
+      <td class="points-cell">${r.points.toFixed(2)}</td>
+    </tr>
+  `).join('') + `
+    <tr style="border-top:2px solid var(--border)">
+      <td style="font-weight:600">Moyenne</td>
+      <td class="note-cell" style="font-size:15px">${avg.toFixed(2)}</td>
+      <td style="font-family:var(--mono);color:var(--muted)">${coefUsed}</td>
+      <td class="points-cell">${total.toFixed(2)}</td>
+    </tr>
+  `;
+
+  const panel = document.getElementById('result_panel');
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type=number]').forEach(el => el.value = '');
+  modules.forEach(mod => {
+    const el = document.getElementById(mod.resId);
+    el.textContent = ''; el.className = 'mod-result';
+  });
+  document.getElementById('result_panel').classList.remove('show');
+}
+</script>
+
+
+</body></html>
